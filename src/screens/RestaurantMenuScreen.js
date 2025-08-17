@@ -10,8 +10,24 @@ import {
 import { COLORS, FONTS, SPACING, BORDER_RADIUS, SHADOWS } from '../constants/theme';
 
 const RestaurantMenuScreen = ({ navigation, route }) => {
-  const { restaurant } = route.params || { restaurant: { name: 'Restaurant' } };
+  const { 
+    restaurant, 
+    restaurantData, 
+    restaurantName, 
+    restaurantPhoto, 
+    userGoal 
+  } = route.params || { 
+    restaurant: { name: 'Restaurant' }, 
+    restaurantData: null,
+    restaurantName: 'Restaurant',
+    userGoal: null
+  };
+  
   const [selectedTab, setSelectedTab] = useState('Meals');
+  
+  // Use real restaurant data if available, otherwise fall back to mock data
+  const displayName = restaurantData?.name || restaurantName || restaurant?.name || 'Restaurant';
+  const realMeals = restaurantData?.healthyOptions || [];
 
   // Mock meal data based on your screenshots
   const meals = [
@@ -87,11 +103,24 @@ const RestaurantMenuScreen = ({ navigation, route }) => {
         <Text style={styles.searchPlaceholder}>Search Food</Text>
       </View>
 
+      {/* Restaurant Info */}
+      <View style={styles.restaurantInfo}>
+        <Text style={styles.restaurantName}>{displayName}</Text>
+        {userGoal && (
+          <Text style={styles.goalBadge}>
+            Optimized for {userGoal === 'cut' ? 'Cutting' : userGoal === 'bulk' ? 'Bulking' : 'Maintaining'}
+          </Text>
+        )}
+        {restaurantData && (
+          <Text style={styles.cuisineType}>{restaurantData.cuisine} • {restaurantData.type}</Text>
+        )}
+      </View>
+
       {/* Meals List */}
       <ScrollView style={styles.mealsContainer} showsVerticalScrollIndicator={false}>
-        {meals.map((meal) => (
+        {(realMeals.length > 0 ? realMeals : meals).map((meal, index) => (
           <TouchableOpacity
-            key={meal.id}
+            key={meal.id || index}
             style={styles.mealCard}
             onPress={() => handleMealPress(meal)}
           >
@@ -323,6 +352,33 @@ const styles = StyleSheet.create({
     color: COLORS.buttonText,
     fontSize: FONTS.base,
     fontWeight: FONTS.semibold,
+  },
+  restaurantInfo: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    backgroundColor: COLORS.background,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  restaurantName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: SPACING.xs,
+  },
+  goalBadge: {
+    fontSize: 14,
+    color: COLORS.primary,
+    backgroundColor: COLORS.primary + '15',
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: BORDER_RADIUS.sm,
+    alignSelf: 'flex-start',
+    marginBottom: SPACING.xs,
+  },
+  cuisineType: {
+    fontSize: 16,
+    color: COLORS.textSecondary,
   },
 });
 
