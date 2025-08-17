@@ -13,6 +13,7 @@ import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { COLORS, FONTS, SPACING, BORDER_RADIUS } from '../constants/theme';
 import userDataService from '../services/userDataService';
+import { RESTAURANT_DATABASE, getMenuItemsByGoal } from '../data/restaurantDatabase';
 
 const RestaurantCameraScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -66,66 +67,62 @@ const RestaurantCameraScreen = ({ navigation }) => {
 
   // Process restaurant image (mock AI processing - in production would use Google Vision API)
   const processRestaurantImage = async (imageUri) => {
-    // Simulate processing time
+    // Simulate AI processing time
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Mock restaurant detection based on common restaurant types
-    const mockRestaurants = [
-      {
-        name: "McDonald's",
-        type: "fast-food",
-        cuisine: "American",
-        healthyOptions: [
-          { name: "Grilled Chicken Salad", calories: 320, protein: 28, carbs: 15, fat: 8, score: 85 },
-          { name: "Egg McMuffin", calories: 300, protein: 17, carbs: 30, fat: 12, score: 75 },
-          { name: "Apple Slices", calories: 15, protein: 0, carbs: 4, fat: 0, score: 95 }
-        ]
-      },
-      {
-        name: "Chipotle",
-        type: "fast-casual",
-        cuisine: "Mexican",
-        healthyOptions: [
-          { name: "Burrito Bowl with Chicken", calories: 540, protein: 45, carbs: 40, fat: 16, score: 90 },
-          { name: "Salad with Steak", calories: 480, protein: 42, carbs: 22, fat: 18, score: 88 },
-          { name: "Chicken Tacos (3)", calories: 420, protein: 36, carbs: 36, fat: 14, score: 82 }
-        ]
-      },
-      {
-        name: "Panera Bread",
-        type: "bakery-cafe",
-        cuisine: "American",
-        healthyOptions: [
-          { name: "Green Goddess Salad", calories: 380, protein: 18, carbs: 28, fat: 14, score: 88 },
-          { name: "Turkey & Avocado BLT", calories: 520, protein: 32, carbs: 45, fat: 22, score: 78 },
-          { name: "Greek Salad", calories: 290, protein: 12, carbs: 18, fat: 20, score: 85 }
-        ]
-      }
-    ];
-
+    // Use real restaurant database
+    const availableRestaurants = Object.values(RESTAURANT_DATABASE);
+    
     // Randomly select a restaurant (in production, this would be actual image recognition)
-    const detectedRestaurant = mockRestaurants[Math.floor(Math.random() * mockRestaurants.length)];
+    const detectedRestaurant = availableRestaurants[Math.floor(Math.random() * availableRestaurants.length)];
     
-    // Filter and score options based on user's goal
-    if (userData?.goal) {
-      detectedRestaurant.healthyOptions = detectedRestaurant.healthyOptions.map(option => {
-        let adjustedScore = option.score;
-        
-        if (userData.goal === 'cut') {
-          // Prefer lower calorie options for cutting
-          if (option.calories < 400) adjustedScore += 10;
-          if (option.protein > 25) adjustedScore += 5;
-        } else if (userData.goal === 'bulk') {
-          // Prefer higher calorie, protein options for bulking
-          if (option.calories > 500) adjustedScore += 10;
-          if (option.protein > 30) adjustedScore += 8;
-        }
-        
-        return { ...option, score: Math.min(adjustedScore, 100) };
-      }).sort((a, b) => b.score - a.score);
-    }
+    // Get menu items optimized for user's goal
+    const optimizedMenuItems = getMenuItemsByGoal(detectedRestaurant, userData?.goal);
     
-    return detectedRestaurant;
+    // Convert menu items to the expected format and add personalized scoring
+    const healthyOptions = optimizedMenuItems.slice(0, 5).map(item => {
+      let personalizedScore = item.healthScore;
+      
+      // Adjust score based on user's goal
+      if (userData?.goal === 'cut') {
+        if (item.calories < 400) personalizedScore += 10;
+        if (item.protein > 25) personalizedScore += 8;
+        if (item.fat < 15) personalizedScore += 5;
+      } else if (userData?.goal === 'bulk') {
+        if (item.calories > 500) personalizedScore += 10;
+        if (item.protein > 30) personalizedScore += 12;
+        if (item.carbs > 40) personalizedScore += 5;
+      }
+      
+      // Filter by dietary preferences
+      if (userData?.foodPreferences?.includes('vegetarian') && !item.tags?.vegetarian) {
+        personalizedScore -= 20;
+      }
+      if (userData?.allergies?.some(allergy => item.allergens.includes(allergy))) {
+        personalizedScore -= 30; // Heavily penalize allergens
+      }
+      
+      return {
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        calories: item.calories,
+        protein: item.protein,
+        carbs: item.carbs,
+        fat: item.fat,
+        score: Math.max(0, Math.min(100, personalizedScore)),
+        price: item.price,
+        ingredients: item.ingredients,
+        allergens: item.allergens
+      };
+    }).sort((a, b) => b.score - a.score);
+    
+    return {
+      ...detectedRestaurant,
+      healthyOptions,
+      detectedVia: 'camera', // Track how restaurant was found
+      personalizedForGoal: userData?.goal || 'general'
+    };
   };
 
   const pickImage = async () => {
