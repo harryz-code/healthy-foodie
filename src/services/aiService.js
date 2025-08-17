@@ -1,8 +1,7 @@
-// AI Service using intelligent fallback responses
-// Note: In production, API keys should be handled by a secure backend
-// For development, the app works without API keys using smart responses
+// AI Service using Hugging Face API with environment variables
+import { HUGGING_FACE_API_KEY } from '@env';
 
-const HF_API_KEY = null; // Removed for security - use environment variables in production
+const HF_API_KEY = HUGGING_FACE_API_KEY;
 const HF_API_URL = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium';
 
 class AIService {
@@ -48,6 +47,16 @@ Always aim to be helpful, accurate, and motivating while keeping responses conci
         role: 'user',
         content: contextualMessage
       });
+
+      // If no API key, use intelligent fallback
+      if (!HF_API_KEY) {
+        const aiResponse = this.getIntelligentResponse(userMessage, userContext);
+        this.conversationHistory.push({
+          role: 'assistant',
+          content: aiResponse
+        });
+        return aiResponse;
+      }
 
       // Prepare the conversation for the API
       const conversationText = this.conversationHistory
