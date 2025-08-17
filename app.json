@@ -1,29 +1,66 @@
 {
   "expo": {
-    "name": "HealthyFoodieApp",
-    "slug": "HealthyFoodieApp",
+    "name": "Healthy Foodie",
+    "slug": "healthy-foodie",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "description": "Your personalized healthy menu for every restaurant. Get AI-powered meal recommendations based on your fitness goals.",
+    "keywords": ["nutrition", "health", "fitness", "restaurant", "meal planning", "diet"],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.healthyfoodie.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to identify restaurants and provide personalized meal recommendations.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to let you select restaurant photos for meal recommendations."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.healthyfoodie.app",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Healthy Foodie to access your camera to identify restaurants and provide meal recommendations."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Healthy Foodie to access your photos to help identify restaurants."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "healthy-foodie-app"
+      }
     }
   }
 }
