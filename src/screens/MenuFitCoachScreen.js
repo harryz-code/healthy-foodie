@@ -12,6 +12,7 @@ import {
 import ChatMessage from '../components/ChatMessage';
 import ChatInput from '../components/ChatInput';
 import aiService from '../services/aiService';
+import userDataService from '../services/userDataService';
 import { COLORS, FONTS, SPACING, BORDER_RADIUS } from '../constants/theme';
 
 const MenuFitCoachScreen = ({ navigation }) => {
@@ -33,12 +34,28 @@ const MenuFitCoachScreen = ({ navigation }) => {
   const [suggestedQuestions, setSuggestedQuestions] = useState([]);
   const scrollViewRef = useRef();
 
-  // Mock user context - in a real app, this would come from user profile
-  const userContext = {
-    goal: 'cut',
-    activityLevel: 'active',
-    preferences: ['high-protein', 'low-carb']
-  };
+  // Real user context loaded from userDataService
+  const [userContext, setUserContext] = useState({
+    goal: 'maintain',
+    activityLevel: 'moderate',
+    preferences: []
+  });
+
+  // Load user data on mount
+  useEffect(() => {
+    const loadUserData = async () => {
+      const data = await userDataService.loadUserData();
+      if (data) {
+        setUserContext({
+          goal: data.goal || 'maintain',
+          activityLevel: data.activityLevel || 'moderate',
+          preferences: [...(data.foodPreferences || []), ...(data.allergies || [])],
+          nutritionGoals: data.nutritionGoals
+        });
+      }
+    };
+    loadUserData();
+  }, []);
 
   useEffect(() => {
     // Initialize suggested questions

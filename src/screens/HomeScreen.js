@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -8,12 +8,139 @@ import {
   TouchableOpacity,
   Image 
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Button from '../components/Button';
 import { COLORS, FONTS, SPACING, BORDER_RADIUS, SHADOWS } from '../constants/theme';
+import userDataService from '../services/userDataService';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [userData, setUserData] = useState(null);
+  const [personalizedMeals, setPersonalizedMeals] = useState([]);
+
+  // Load user data when screen focuses
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadData = async () => {
+        const data = await userDataService.loadUserData();
+        setUserData(data);
+        
+        // Generate personalized meal recommendations
+        const meals = generatePersonalizedMeals(data);
+        setPersonalizedMeals(meals);
+      };
+      loadData();
+    }, [])
+  );
+
+  // Generate personalized meal recommendations based on user goals
+  const generatePersonalizedMeals = (userData) => {
+    const { goal, foodPreferences = [], allergies = [] } = userData;
+    
+    // Base meals database
+    const allMeals = [
+      {
+        id: 1,
+        name: "Grilled Chicken Salad",
+        restaurant: "Panera",
+        calories: 450,
+        protein: 35,
+        carbs: 12,
+        fat: 8,
+        tags: ['high-protein', 'low-carb', 'gluten-free'],
+        goalFit: { bulk: 75, cut: 95, maintain: 85 }
+      },
+      {
+        id: 2,
+        name: "Quinoa Power Bowl",
+        restaurant: "Sweetgreen",
+        calories: 520,
+        protein: 18,
+        carbs: 45,
+        fat: 12,
+        tags: ['vegetarian', 'high-fiber', 'vegan'],
+        goalFit: { bulk: 85, cut: 80, maintain: 90 }
+      },
+      {
+        id: 3,
+        name: "Salmon Teriyaki Bowl",
+        restaurant: "Poke Bros",
+        calories: 650,
+        protein: 42,
+        carbs: 55,
+        fat: 18,
+        tags: ['high-protein', 'omega-3', 'gluten-free'],
+        goalFit: { bulk: 95, cut: 70, maintain: 85 }
+      },
+      {
+        id: 4,
+        name: "Veggie Protein Wrap",
+        restaurant: "Subway",
+        calories: 380,
+        protein: 20,
+        carbs: 35,
+        fat: 6,
+        tags: ['vegetarian', 'high-protein', 'low-fat'],
+        goalFit: { bulk: 65, cut: 90, maintain: 80 }
+      },
+      {
+        id: 5,
+        name: "Steak Burrito Bowl",
+        restaurant: "Chipotle",
+        calories: 720,
+        protein: 45,
+        carbs: 48,
+        fat: 22,
+        tags: ['high-protein', 'high-calorie'],
+        goalFit: { bulk: 95, cut: 60, maintain: 75 }
+      }
+    ];
+
+    // Filter meals based on preferences and allergies
+    let filteredMeals = allMeals.filter(meal => {
+      // Check food preferences
+      if (foodPreferences.includes('vegetarian') && !meal.tags.includes('vegetarian')) {
+        return false;
+      }
+      if (foodPreferences.includes('vegan') && !meal.tags.includes('vegan')) {
+        return false;
+      }
+      
+      // Check allergies (simplified)
+      if (allergies.includes('gluten') && !meal.tags.includes('gluten-free')) {
+        return false;
+      }
+      
+      return true;
+    });
+
+    // Sort by goal fitness score
+    const goalKey = goal || 'maintain';
+    filteredMeals.sort((a, b) => (b.goalFit[goalKey] || 0) - (a.goalFit[goalKey] || 0));
+
+    // Add score and description based on goal
+    return filteredMeals.slice(0, 3).map(meal => ({
+      ...meal,
+      score: meal.goalFit[goalKey] || 75,
+      description: getGoalBasedDescription(meal.goalFit[goalKey] || 75, goalKey)
+    }));
+  };
+
+  const getGoalBasedDescription = (score, goal) => {
+    if (score >= 90) {
+      return goal === 'cut' ? "Perfect for cutting! Low calories, high protein." :
+             goal === 'bulk' ? "Great for bulking! High calories and protein." :
+             "Excellent balanced choice for your goals.";
+    } else if (score >= 80) {
+      return goal === 'cut' ? "Good choice for cutting with moderate calories." :
+             goal === 'bulk' ? "Solid option for bulking goals." :
+             "Good balanced meal option.";
+    } else {
+      return goal === 'cut' ? "Higher calories - enjoy occasionally." :
+             goal === 'bulk' ? "Lower calories - pair with snacks." :
+             "Decent option, consider your daily goals.";
+    }
+  };
 
   const featuredMeals = [
     {
@@ -123,12 +250,41 @@ const HomeScreen = () => {
 
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Perfect meal to get started:</Text>
+          <Text style={styles.welcomeTitle}>
+            {userData?.goal ? 
+              `Perfect meals for ${userData.goal === 'cut' ? 'cutting' : userData.goal === 'bulk' ? 'bulking' : 'maintaining'}:` :
+              'Perfect meal to get started:'
+            }
+          </Text>
+          
+          {userData?.nutritionGoals?.dailyCalories && (
+            <View style={styles.goalCard}>
+              <Text style={styles.goalTitle}>Today's Targets</Text>
+              <View style={styles.macroRow}>
+                <View style={styles.macroItem}>
+                  <Text style={styles.macroValue}>{userData.nutritionGoals.dailyCalories}</Text>
+                  <Text style={styles.macroLabel}>Calories</Text>
+                </View>
+                <View style={styles.macroItem}>
+                  <Text style={styles.macroValue}>{userData.nutritionGoals.protein}g</Text>
+                  <Text style={styles.macroLabel}>Protein</Text>
+                </View>
+                <View style={styles.macroItem}>
+                  <Text style={styles.macroValue}>{userData.nutritionGoals.carbs}g</Text>
+                  <Text style={styles.macroLabel}>Carbs</Text>
+                </View>
+                <View style={styles.macroItem}>
+                  <Text style={styles.macroValue}>{userData.nutritionGoals.fats}g</Text>
+                  <Text style={styles.macroLabel}>Fats</Text>
+                </View>
+              </View>
+            </View>
+          )}
         </View>
 
         {/* Featured Meals */}
         <View style={styles.featuredMeals}>
-          {featuredMeals.map(renderMealCard)}
+          {(personalizedMeals.length > 0 ? personalizedMeals : featuredMeals).map(renderMealCard)}
         </View>
 
         {/* Quick Actions */}
@@ -353,6 +509,37 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: SPACING.xl,
+  },
+  goalCard: {
+    backgroundColor: COLORS.primary + '10',
+    borderRadius: BORDER_RADIUS.md,
+    padding: SPACING.md,
+    marginTop: SPACING.md,
+  },
+  goalTitle: {
+    fontSize: 16,
+    fontFamily: FONTS.medium,
+    color: COLORS.text,
+    marginBottom: SPACING.sm,
+    textAlign: 'center',
+  },
+  macroRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  macroItem: {
+    alignItems: 'center',
+  },
+  macroValue: {
+    fontSize: 18,
+    fontFamily: FONTS.bold,
+    color: COLORS.primary,
+  },
+  macroLabel: {
+    fontSize: 12,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
+    marginTop: 2,
   },
 });
 
