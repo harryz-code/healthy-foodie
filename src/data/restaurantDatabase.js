@@ -2,7 +2,7 @@
 // Data sourced from official restaurant nutrition guides and verified databases
 
 export const RESTAURANT_DATABASE = {
-  // McDonald's - Official nutrition data
+  // McDonald's - Official nutrition data (comprehensive menu from PDF)
   mcdonalds: {
     id: 'mcdonalds',
     name: "McDonald's",
@@ -13,69 +13,423 @@ export const RESTAURANT_DATABASE = {
     healthScore: 65,
     locations: ['Nationwide'],
     menuItems: [
+      // BREAKFAST ITEMS
       {
         id: 'egg_mcmuffin',
         name: 'Egg McMuffin',
         category: 'Breakfast',
-        calories: 300,
-        protein: 17,
-        carbs: 30,
-        fat: 12,
-        fiber: 2,
-        sugar: 3,
-        sodium: 750,
-        price: 4.99,
+        calories: 300, protein: 17, carbs: 31, fat: 13,
+        fiber: 4, sugar: 3, sodium: 750, price: 4.99,
+        healthScore: 78,
         ingredients: ['English muffin', 'egg', 'Canadian bacon', 'American cheese'],
-        allergens: ['gluten', 'eggs', 'dairy'],
-        healthScore: 75
+        allergens: ['gluten', 'eggs', 'dairy']
       },
       {
-        id: 'grilled_chicken_salad',
-        name: 'Premium Southwest Salad with Grilled Chicken',
-        category: 'Salads',
-        calories: 350,
-        protein: 37,
-        carbs: 27,
-        fat: 12,
-        fiber: 7,
-        sugar: 11,
-        sodium: 920,
-        price: 8.99,
-        ingredients: ['mixed greens', 'grilled chicken', 'black beans', 'corn', 'tomatoes'],
-        allergens: [],
-        healthScore: 85
+        id: 'sausage_mcmuffin_egg',
+        name: 'Sausage McMuffin with Egg',
+        category: 'Breakfast',
+        calories: 450, protein: 21, carbs: 30, fat: 28,
+        fiber: 4, sugar: 2, sodium: 860, price: 5.49,
+        healthScore: 65,
+        ingredients: ['English muffin', 'sausage patty', 'egg', 'American cheese'],
+        allergens: ['gluten', 'eggs', 'dairy']
       },
+      {
+        id: 'fruit_maple_oatmeal',
+        name: 'Fruit & Maple Oatmeal',
+        category: 'Breakfast',
+        calories: 290, protein: 5, carbs: 58, fat: 4,
+        fiber: 5, sugar: 32, sodium: 160, price: 4.49,
+        healthScore: 85,
+        ingredients: ['oatmeal', 'diced apples', 'cranberry raisin blend', 'brown sugar'],
+        allergens: []
+      },
+      {
+        id: 'egg_white_delight',
+        name: 'Egg White Delight',
+        category: 'Breakfast',
+        calories: 250, protein: 18, carbs: 30, fat: 8,
+        fiber: 4, sugar: 3, sodium: 770, price: 4.99,
+        healthScore: 88,
+        ingredients: ['English muffin', 'egg whites', 'Canadian bacon', 'white cheddar cheese'],
+        allergens: ['gluten', 'eggs', 'dairy']
+      },
+      {
+        id: 'hotcakes_sausage',
+        name: 'Hotcakes and Sausage',
+        category: 'Breakfast',
+        calories: 520, protein: 15, carbs: 61, fat: 24,
+        fiber: 3, sugar: 14, sodium: 930, price: 6.99,
+        healthScore: 45,
+        ingredients: ['hotcakes', 'sausage patty', 'hotcake syrup', 'whipped margarine'],
+        allergens: ['gluten', 'eggs', 'dairy']
+      },
+      {
+        id: 'bacon_egg_cheese_biscuit',
+        name: 'Bacon, Egg & Cheese Biscuit',
+        category: 'Breakfast',
+        calories: 460, protein: 19, carbs: 38, fat: 26,
+        fiber: 3, sugar: 4, sodium: 1300, price: 5.79,
+        healthScore: 55,
+        ingredients: ['buttermilk biscuit', 'folded egg', 'bacon', 'American cheese'],
+        allergens: ['gluten', 'eggs', 'dairy']
+      },
+      // BURGERS
       {
         id: 'big_mac',
         name: 'Big Mac',
         category: 'Burgers',
-        calories: 563,
-        protein: 25,
-        carbs: 45,
-        fat: 33,
-        fiber: 3,
-        sugar: 9,
-        sodium: 1010,
-        price: 6.99,
-        ingredients: ['beef patties', 'special sauce', 'lettuce', 'cheese', 'pickles', 'onions', 'sesame seed bun'],
-        allergens: ['gluten', 'dairy', 'eggs'],
-        healthScore: 45
+        calories: 540, protein: 25, carbs: 47, fat: 28,
+        fiber: 3, sugar: 9, sodium: 970, price: 7.49,
+        healthScore: 55,
+        ingredients: ['sesame seed bun', '100% beef patties', 'Big Mac sauce', 'lettuce', 'cheese', 'pickles', 'onions'],
+        allergens: ['gluten', 'dairy', 'eggs', 'soy']
       },
+      {
+        id: 'quarter_pounder_cheese',
+        name: 'Quarter Pounder with Cheese',
+        category: 'Burgers',
+        calories: 540, protein: 31, carbs: 42, fat: 28,
+        fiber: 3, sugar: 10, sodium: 1110, price: 8.99,
+        healthScore: 58,
+        ingredients: ['sesame seed bun', '1/4 lb beef patty', 'American cheese', 'ketchup', 'mustard', 'pickles', 'onions'],
+        allergens: ['gluten', 'dairy']
+      },
+      {
+        id: 'double_quarter_pounder_cheese',
+        name: 'Double Quarter Pounder with Cheese',
+        category: 'Burgers',
+        calories: 780, protein: 50, carbs: 43, fat: 45,
+        fiber: 3, sugar: 10, sodium: 1310, price: 10.99,
+        healthScore: 50,
+        ingredients: ['sesame seed bun', '2 x 1/4 lb beef patties', 'American cheese', 'ketchup', 'mustard', 'pickles', 'onions'],
+        allergens: ['gluten', 'dairy']
+      },
+      {
+        id: 'hamburger',
+        name: 'Hamburger',
+        category: 'Burgers',
+        calories: 250, protein: 12, carbs: 32, fat: 8,
+        fiber: 1, sugar: 6, sodium: 490, price: 2.49,
+        healthScore: 70,
+        ingredients: ['regular bun', 'beef patty', 'ketchup', 'mustard', 'pickles', 'onions'],
+        allergens: ['gluten']
+      },
+      {
+        id: 'cheeseburger',
+        name: 'Cheeseburger',
+        category: 'Burgers',
+        calories: 300, protein: 15, carbs: 33, fat: 12,
+        fiber: 2, sugar: 7, sodium: 680, price: 2.99,
+        healthScore: 68,
+        ingredients: ['regular bun', 'beef patty', 'American cheese', 'ketchup', 'mustard', 'pickles', 'onions'],
+        allergens: ['gluten', 'dairy']
+      },
+      {
+        id: 'mcdouble',
+        name: 'McDouble',
+        category: 'Burgers',
+        calories: 390, protein: 22, carbs: 34, fat: 18,
+        fiber: 2, sugar: 7, sodium: 850, price: 3.99,
+        healthScore: 62,
+        ingredients: ['regular bun', '2 beef patties', 'American cheese', 'ketchup', 'mustard', 'pickles', 'onions'],
+        allergens: ['gluten', 'dairy']
+      },
+      // CHICKEN & FISH
+      {
+        id: 'artisan_grilled_chicken',
+        name: 'Artisan Grilled Chicken Sandwich',
+        category: 'Chicken',
+        calories: 360, protein: 33, carbs: 43, fat: 6,
+        fiber: 3, sugar: 10, sodium: 960, price: 7.99,
+        healthScore: 85,
+        ingredients: ['artisan roll', 'grilled chicken breast', 'lettuce', 'tomato', 'mayo'],
+        allergens: ['gluten', 'eggs']
+      },
+      {
+        id: 'buttermilk_crispy_chicken',
+        name: 'Buttermilk Crispy Chicken Sandwich',
+        category: 'Chicken',
+        calories: 580, protein: 29, carbs: 62, fat: 24,
+        fiber: 4, sugar: 11, sodium: 900, price: 7.99,
+        healthScore: 60,
+        ingredients: ['artisan roll', 'buttermilk crispy chicken', 'lettuce', 'tomato'],
+        allergens: ['gluten', 'dairy']
+      },
+      {
+        id: 'mcchicken',
+        name: 'McChicken',
+        category: 'Chicken',
+        calories: 370, protein: 14, carbs: 40, fat: 17,
+        fiber: 2, sugar: 5, sodium: 650, price: 4.99,
+        healthScore: 62,
+        ingredients: ['regular bun', 'crispy chicken patty', 'lettuce', 'mayo'],
+        allergens: ['gluten', 'eggs']
+      },
+      {
+        id: 'chicken_mcnuggets_10pc',
+        name: 'Chicken McNuggets (10 piece)',
+        category: 'Chicken',
+        calories: 470, protein: 22, carbs: 30, fat: 30,
+        fiber: 2, sugar: 0, sodium: 900, price: 8.99,
+        healthScore: 60,
+        ingredients: ['white meat chicken', 'breading', 'vegetable oil'],
+        allergens: ['gluten']
+      },
+      {
+        id: 'chicken_mcnuggets_6pc',
+        name: 'Chicken McNuggets (6 piece)',
+        category: 'Chicken',
+        calories: 280, protein: 13, carbs: 18, fat: 18,
+        fiber: 1, sugar: 0, sodium: 540, price: 6.49,
+        healthScore: 65,
+        ingredients: ['white meat chicken', 'breading', 'vegetable oil'],
+        allergens: ['gluten']
+      },
+      {
+        id: 'chicken_mcnuggets_4pc',
+        name: 'Chicken McNuggets (4 piece)',
+        category: 'Chicken',
+        calories: 190, protein: 9, carbs: 12, fat: 12,
+        fiber: 1, sugar: 0, sodium: 360, price: 3.99,
+        healthScore: 68,
+        ingredients: ['white meat chicken', 'breading', 'vegetable oil'],
+        allergens: ['gluten']
+      },
+      {
+        id: 'filet_o_fish',
+        name: 'Filet-O-Fish',
+        category: 'Fish',
+        calories: 390, protein: 15, carbs: 39, fat: 19,
+        fiber: 2, sugar: 5, sodium: 590, price: 6.49,
+        healthScore: 72,
+        ingredients: ['steamed bun', 'fish filet', 'tartar sauce', 'American cheese'],
+        allergens: ['gluten', 'fish', 'dairy', 'eggs']
+      },
+      // SALADS
+      {
+        id: 'premium_asian_salad_grilled',
+        name: 'Premium Asian Salad with Grilled Chicken',
+        category: 'Salads',
+        calories: 270, protein: 32, carbs: 18, fat: 9,
+        fiber: 5, sugar: 10, sodium: 760, price: 8.99,
+        healthScore: 92,
+        ingredients: ['mixed greens', 'grilled chicken', 'red cabbage', 'carrots', 'edamame', 'almonds', 'orange segments'],
+        allergens: ['tree nuts']
+      },
+      {
+        id: 'premium_southwest_salad_grilled',
+        name: 'Premium Southwest Salad with Grilled Chicken',
+        category: 'Salads',
+        calories: 330, protein: 33, carbs: 26, fat: 11,
+        fiber: 6, sugar: 9, sodium: 920, price: 8.99,
+        healthScore: 88,
+        ingredients: ['lettuce blend', 'grilled chicken', 'corn', 'black beans', 'tomatoes', 'cheese', 'chili lime tortilla strips'],
+        allergens: ['dairy', 'gluten']
+      },
+      {
+        id: 'premium_bacon_ranch_salad_grilled',
+        name: 'Premium Bacon Ranch Salad with Grilled Chicken',
+        category: 'Salads',
+        calories: 310, protein: 38, carbs: 9, fat: 14,
+        fiber: 3, sugar: 3, sodium: 1120, price: 8.99,
+        healthScore: 85,
+        ingredients: ['mixed greens', 'grilled chicken', 'bacon', 'cheese', 'grape tomatoes'],
+        allergens: ['dairy']
+      },
+      {
+        id: 'side_salad',
+        name: 'Side Salad',
+        category: 'Salads',
+        calories: 15, protein: 1, carbs: 3, fat: 0,
+        fiber: 2, sugar: 1, sodium: 10, price: 2.99,
+        healthScore: 95,
+        ingredients: ['iceberg lettuce', 'romaine lettuce', 'carrots', 'red cabbage'],
+        allergens: []
+      },
+      // SIDES
       {
         id: 'apple_slices',
         name: 'Apple Slices',
         category: 'Sides',
-        calories: 15,
-        protein: 0,
-        carbs: 4,
-        fat: 0,
-        fiber: 0,
-        sugar: 4,
-        sodium: 0,
-        price: 1.99,
-        ingredients: ['fresh apple slices'],
-        allergens: [],
-        healthScore: 95
+        calories: 15, protein: 0, carbs: 4, fat: 0,
+        fiber: 0, sugar: 3, sodium: 0, price: 1.99,
+        healthScore: 100,
+        ingredients: ['apples', 'calcium ascorbate'],
+        allergens: []
+      },
+      {
+        id: 'french_fries_small',
+        name: 'French Fries (Small)',
+        category: 'Sides',
+        calories: 230, protein: 2, carbs: 30, fat: 11,
+        fiber: 2, sugar: 0, sodium: 130, price: 2.99,
+        healthScore: 45,
+        ingredients: ['potatoes', 'vegetable oil', 'salt'],
+        allergens: []
+      },
+      {
+        id: 'french_fries_medium',
+        name: 'French Fries (Medium)',
+        category: 'Sides',
+        calories: 340, protein: 4, carbs: 44, fat: 16,
+        fiber: 4, sugar: 0, sodium: 190, price: 3.99,
+        healthScore: 40,
+        ingredients: ['potatoes', 'vegetable oil', 'salt'],
+        allergens: []
+      },
+      {
+        id: 'french_fries_large',
+        name: 'French Fries (Large)',
+        category: 'Sides',
+        calories: 510, protein: 6, carbs: 67, fat: 24,
+        fiber: 5, sugar: 0, sodium: 290, price: 4.99,
+        healthScore: 35,
+        ingredients: ['potatoes', 'vegetable oil', 'salt'],
+        allergens: []
+      },
+      {
+        id: 'hash_browns',
+        name: 'Hash Browns',
+        category: 'Breakfast',
+        calories: 150, protein: 2, carbs: 15, fat: 9,
+        fiber: 2, sugar: 0, sodium: 310, price: 2.49,
+        healthScore: 50,
+        ingredients: ['potatoes', 'vegetable oil', 'salt'],
+        allergens: []
+      },
+      // BEVERAGES
+      {
+        id: 'dasani_water',
+        name: 'Dasani Water',
+        category: 'Beverages',
+        calories: 0, protein: 0, carbs: 0, fat: 0,
+        fiber: 0, sugar: 0, sodium: 0, price: 1.99,
+        healthScore: 100,
+        ingredients: ['purified water', 'magnesium sulfate', 'potassium chloride'],
+        allergens: []
+      },
+      {
+        id: 'milk_1percent',
+        name: '1% Low Fat Milk Jug',
+        category: 'Beverages',
+        calories: 100, protein: 8, carbs: 12, fat: 2.5,
+        fiber: 0, sugar: 12, sodium: 125, price: 2.49,
+        healthScore: 85,
+        ingredients: ['reduced fat milk', 'vitamin A', 'vitamin D3'],
+        allergens: ['dairy']
+      },
+      {
+        id: 'orange_juice_small',
+        name: 'Minute Maid Orange Juice (Small)',
+        category: 'Beverages',
+        calories: 150, protein: 0, carbs: 34, fat: 0,
+        fiber: 0, sugar: 30, sodium: 0, price: 2.99,
+        healthScore: 75,
+        ingredients: ['orange juice concentrate', 'water', 'natural flavors'],
+        allergens: []
+      },
+      {
+        id: 'coca_cola_small',
+        name: 'Coca-Cola Classic (Small)',
+        category: 'Beverages',
+        calories: 140, protein: 0, carbs: 39, fat: 0,
+        fiber: 0, sugar: 39, sodium: 0, price: 1.99,
+        healthScore: 25,
+        ingredients: ['carbonated water', 'high fructose corn syrup', 'caramel color', 'caffeine'],
+        allergens: []
+      },
+      {
+        id: 'diet_coke_small',
+        name: 'Diet Coke (Small)',
+        category: 'Beverages',
+        calories: 0, protein: 0, carbs: 0, fat: 0,
+        fiber: 0, sugar: 0, sodium: 10, price: 1.99,
+        healthScore: 60,
+        ingredients: ['carbonated water', 'caramel color', 'aspartame', 'caffeine'],
+        allergens: []
+      },
+      // MCCAFE
+      {
+        id: 'coffee_small',
+        name: 'Premium Roast Coffee (Small)',
+        category: 'McCafé',
+        calories: 0, protein: 0, carbs: 0, fat: 0,
+        fiber: 0, sugar: 0, sodium: 0, price: 1.99,
+        healthScore: 90,
+        ingredients: ['100% arabica coffee beans', 'water'],
+        allergens: []
+      },
+      {
+        id: 'latte_small',
+        name: 'McCafé Latte (Small)',
+        category: 'McCafé',
+        calories: 170, protein: 12, carbs: 15, fat: 9,
+        fiber: 0, sugar: 13, sodium: 115, price: 4.99,
+        healthScore: 70,
+        ingredients: ['espresso', 'steamed milk'],
+        allergens: ['dairy']
+      },
+      {
+        id: 'iced_coffee_small',
+        name: 'Premium Roast Iced Coffee (Small)',
+        category: 'McCafé',
+        calories: 140, protein: 2, carbs: 23, fat: 4.5,
+        fiber: 0, sugar: 22, sodium: 35, price: 2.99,
+        healthScore: 60,
+        ingredients: ['coffee', 'ice', 'light cream', 'liquid sugar'],
+        allergens: ['dairy']
+      },
+      {
+        id: 'mocha_small',
+        name: 'McCafé Mocha (Small)',
+        category: 'McCafé',
+        calories: 340, protein: 10, carbs: 49, fat: 11,
+        fiber: 2, sugar: 42, sodium: 150, price: 5.49,
+        healthScore: 45,
+        ingredients: ['espresso', 'steamed milk', 'chocolate syrup', 'whipped cream'],
+        allergens: ['dairy']
+      },
+      // DESSERTS
+      {
+        id: 'apple_pie',
+        name: 'Baked Hot Apple Pie',
+        category: 'Desserts',
+        calories: 250, protein: 2, carbs: 32, fat: 13,
+        fiber: 4, sugar: 13, sodium: 170, price: 2.49,
+        healthScore: 55,
+        ingredients: ['apples', 'pie crust', 'sugar', 'cinnamon'],
+        allergens: ['gluten']
+      },
+      {
+        id: 'vanilla_cone',
+        name: 'Vanilla Reduced Fat Ice Cream Cone',
+        category: 'Desserts',
+        calories: 170, protein: 5, carbs: 27, fat: 4.5,
+        fiber: 0, sugar: 20, sodium: 70, price: 2.49,
+        healthScore: 50,
+        ingredients: ['reduced fat ice cream', 'cone'],
+        allergens: ['dairy', 'gluten']
+      },
+      {
+        id: 'chocolate_chip_cookie',
+        name: 'Chocolate Chip Cookie',
+        category: 'Desserts',
+        calories: 160, protein: 2, carbs: 21, fat: 8,
+        fiber: 1, sugar: 15, sodium: 90, price: 1.99,
+        healthScore: 40,
+        ingredients: ['flour', 'chocolate chips', 'sugar', 'butter'],
+        allergens: ['gluten', 'dairy', 'eggs']
+      },
+      {
+        id: 'mcflurry_oreo',
+        name: 'McFlurry with OREO Cookies',
+        category: 'Desserts',
+        calories: 520, protein: 12, carbs: 80, fat: 17,
+        fiber: 1, sugar: 64, sodium: 260, price: 4.99,
+        healthScore: 30,
+        ingredients: ['vanilla reduced fat ice cream', 'OREO cookie pieces'],
+        allergens: ['dairy', 'gluten']
       }
     ]
   },
